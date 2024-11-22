@@ -6,8 +6,6 @@
         <link href="style/style_connexion.css" rel="stylesheet">
         <?php
         session_start();
-        
-    
         ?>
     </head>
     <body>
@@ -37,25 +35,24 @@
                 catch(Exception $e){
                     die("Erreur: ".$e->getMessage());
                 }
-
-                $_SESSION['login'] = $_POST['nomUtil'];
-
+            
                 $requete = $linkpdo->prepare('SELECT mdp FROM utilisateur WHERE login = :login');
                 $requete->execute(array('login'=>$_POST['nomUtil']));
-
                 $resultat = $requete->fetch(PDO::FETCH_ASSOC);
+
                 if($resultat){
-                    $hash_password = $resultat['mdp'];
-                    if(password_verify($_POST['mdp'],$hash_password)){
+                    
+                    if(password_verify($_POST['mdp'],$resultat['mdp'])){
                         echo('Correct');
                     } else {
                         echo('Mot de passe/Nom utilisateur erroné');
                     }
+                }else{
+                    echo("Utilisateur inconnu");
                 }
             } 
-        }
+        } 
         ?>
           </div>
-
     </body>
 </html>
