@@ -1,12 +1,12 @@
+<?php
+        session_start();
+        ?>
 <!DOCTYPE html>
 <html lang="fr">
     <head>
         <meta charset="utf-8">
         <title>Gestion volley : connexion</title>
         <link href="style/style_connexion.css" rel="stylesheet">
-        <?php
-        session_start();
-        ?>
     </head>
     <body>
         <?php
@@ -25,7 +25,6 @@
                     </li>
                     <input type="submit" name="submdp" value="Entrer"\>
                 </form>
-          
             
         <?php
             if(isset($_POST['nomUtil']) && isset($_POST['mdp'])){
@@ -43,10 +42,13 @@
                 if($resultat){
                     
                     if(password_verify($_POST['mdp'],$resultat['mdp'])){
-                        echo('Correct');
+                        $_SESSION["login"]=$_POST['nomUtil'];
+                        echo("Correct");
+                        //header('Location:**');
+                        //exit();
                     } else {
-                        echo('Mot de passe/Nom utilisateur erroné');
-                    }
+                        echo('Mot de passe erroné');
+                    }   
                 }else{
                     echo("Utilisateur inconnu");
                 }
