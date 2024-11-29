@@ -1,6 +1,6 @@
 <?php
-        session_start();
-        ?>
+    session_start();
+?>
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -9,6 +9,7 @@
         <link href="style/style_connexion.css" rel="stylesheet">
     </head>
     <body>
+        <!-- Affichage du fromulaire si l'utilisateur n'a pas de session en cours -->
         <?php
             if(!isset($_SESSION["login"])) {
         ?>
@@ -25,7 +26,7 @@
                     </li>
                     <input type="submit" name="submdp" value="Entrer"\>
                 </form>
-            
+        <!-- Quand l'utilisateur en envoyé le formulaire : connexion a la base de données -->
         <?php
             if(isset($_POST['nomUtil']) && isset($_POST['mdp'])){
                 try{
@@ -34,27 +35,29 @@
                 catch(Exception $e){
                     die("Erreur: ".$e->getMessage());
                 }
-            
+                //Recherche des données entrées dans la base de données
                 $requete = $linkpdo->prepare('SELECT mdp FROM utilisateur WHERE login = :login');
                 $requete->execute(array('login'=>$_POST['nomUtil']));
                 $resultat = $requete->fetch(PDO::FETCH_ASSOC);
 
                 if($resultat){
-                    
+                    //Si le mot de passe correspond au hachage : ouverture de la page d'accueil
                     if(password_verify($_POST['mdp'],$resultat['mdp'])){
                         $_SESSION["login"]=$_POST['nomUtil'];
                         echo("Correct");
                         //header('Location:**');
                         //exit();
                     } else {
+                    //Si l'utilisateur n'est pas trouvé dans la base de données ou que le mot de passe est incorrect :
+                    //Affichage d'une erreur adéquat
                         echo('Mot de passe erroné');
-                    }   
+                    }
                 }else{
                     echo("Utilisateur inconnu");
                 }
-            } 
-        } 
+            }
+        }
         ?>
-          </div>
+            </div>
     </body>
 </html>
