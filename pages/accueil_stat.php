@@ -29,7 +29,7 @@
                 <?php
                 try {
                     // Connexion à la base de données
-                    $linkpdo = new PDO("mysql:host=localhost;dbname=gestion_sport", "root", "");
+                    $linkpdo = new PDO("mysql:host=mysql-volleytrack.alwaysdata.net;dbname=volleytrack_bd", "385425", "\$iutinfo");
 
                     $requete = $linkpdo->query("SELECT COUNT(*) AS total FROM matchs");
                     $totalMatchs = $requete->fetch(PDO::FETCH_ASSOC)['total'];
