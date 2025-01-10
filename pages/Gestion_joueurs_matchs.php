@@ -40,15 +40,24 @@
                     <label>Commentaire (facultatif) : </label>
                     <textarea id="commentaire" name="commentaire"></textarea>
                 </li>
+                <li>
+                    <label>Statut : </label>
+                    <select id="statut" name="statut" required>
+                        <option value="Actif">Actif</option>
+                        <option value="Blessé">Blessé</option>
+                        <option value="Suspendu">Suspendu</option>
+                        <option value="Absent">Absent</option>
+                    </select>
+                </li>
                 <input type="submit" name="submdp" value="+"\>
             </form>
         </div>
         <?php
         try{
-            if(isset($_POST['submdp']) && isset($_POST['NumLic']) && isset($_POST['nomJ']) && isset($_POST['prenomJ']) && isset($_POST['dateJ']) && isset($_POST['tailleJ']) && isset($_POST['poid']) && isset($_POST['commentaire'])){
+            if(isset($_POST['submdp']) && isset($_POST['NumLic']) && isset($_POST['nomJ']) && isset($_POST['prenomJ']) && isset($_POST['dateJ']) && isset($_POST['tailleJ']) && isset($_POST['poid']) && isset($_POST['commentaire']) && isset($_POST['statut'])){
             $linkpdo = new PDO("mysql:host=localhost;dbname=volleytrack_bd","root","");
             $requete = $linkpdo->prepare('INSERT INTO joueurs(Numéro_de_licence,Nom,Prenom,Date_de_naissance ,Taille,Poids,Commentaire,Statut) VALUES (:num,:Nom,:Prenom,:Date_de_naissance ,:Taille, :Poids,:Commentaire,:Statut)');
-            $requete->execute(array('num'=>$_POST['NumLic'],'Nom'=>$_POST['nomJ'],'Prenom'=>$_POST['prenomJ'],'Date_de_naissance'=>$_POST['dateJ'],'Taille'=>$_POST['tailleJ'],'Poids'=>$_POST['poid'],'Commentaire'=>$_POST['commentaire'],'Statut'=>'Actif'));
+            $requete->execute(array('num'=>$_POST['NumLic'],'Nom'=>$_POST['nomJ'],'Prenom'=>$_POST['prenomJ'],'Date_de_naissance'=>$_POST['dateJ'],'Taille'=>$_POST['tailleJ'],'Poids'=>$_POST['poid'],'Commentaire'=>$_POST['commentaire'],'Statut'=>$_POST['statut']));
             }
         }
         catch(Exception $e){
@@ -105,7 +114,17 @@
                             <label>Commentaire : </label>
                             <textarea name="commentaire"><?php echo $joueur['Commentaire'] ?></textarea>
                         </li>
+                        <li>
+                            <label>Statut : </label>
+                            <select id="statut" name="statut" required>
+                                <option value="Actif">Actif</option>
+                                <option value="Blessé">Blessé</option>
+                                <option value="Suspendu">Suspendu</option>
+                                <option value="Absent">Absent</option>
+                            </select>
+                        </li>
                         <input type="submit" name="update" value="Mettre à jour">
+                        <input type="submit" name="supprimer" value="Supprimer">
                     </form>
                 </div>
                 <?php
@@ -115,7 +134,7 @@
         }
 
         if (isset($_POST['update'])) {
-            $updateRequete = $linkpdo->prepare('UPDATE joueurs SET Nom = :Nom, Prenom = :Prenom, Date_de_naissance = :Date_de_naissance, Taille = :Taille, Poids = :Poids, Commentaire = :Commentaire WHERE Numéro_de_licence = :num');
+            $updateRequete = $linkpdo->prepare('UPDATE joueurs SET Nom = :Nom, Prenom = :Prenom, Date_de_naissance = :Date_de_naissance, Taille = :Taille, Poids = :Poids, Commentaire = :Commentaire, Statut = :statut WHERE Numéro_de_licence = :num');
             $updateRequete->execute([
                 'Nom' => $_POST['nomJ'],
                 'Prenom' => $_POST['prenomJ'],
@@ -124,9 +143,18 @@
                 'Poids' => $_POST['poid'],
                 'Commentaire' => $_POST['commentaire'],
                 'num' => $_POST['NumLic'],
+                'statut' => $_POST['statut']
             ]);
 
             echo "<p>Joueur mis à jour avec succès !</p>";
+        }
+
+        if (isset($_POST['supprimer'])) {
+            $supprimerRequete = $linkpdo->prepare('DELETE FROM joueurs WHERE Numéro_de_licence = :num');
+            $supprimerRequete->execute([
+                'num' => $_POST['NumLic']
+            ]);
+            echo "<p>Le joueur a été supprimé</p>";
         }
     } catch (Exception $e) {
         die("Erreur : " . $e->getMessage());
