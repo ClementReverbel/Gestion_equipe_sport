@@ -150,11 +150,20 @@
         }
 
         if (isset($_POST['supprimer'])) {
+            $nbMatchRequete = $linkpdo->prepare('SELECT count(*) FROM participer p  WHERE p.idJoueur = (SELECT idJoueur FROM joueurs WHERE Numéro_de_licence = :num)');
+            $nbMatchRequete->execute([
+                'num' => $_POST['NumLic']
+            ]);
+            $nombreDeMatchs = $nbMatchRequete->fetchColumn();
+            if ($nombreDeMatchs >= 1){
+                echo "<p>Impossible de supprimer le joueur car il a déjà participer à un match</p>";
+            } else {
             $supprimerRequete = $linkpdo->prepare('DELETE FROM joueurs WHERE Numéro_de_licence = :num');
             $supprimerRequete->execute([
                 'num' => $_POST['NumLic']
             ]);
             echo "<p>Le joueur a été supprimé</p>";
+            }
         }
     } catch (Exception $e) {
         die("Erreur : " . $e->getMessage());
