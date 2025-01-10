@@ -30,7 +30,7 @@
         <?php
             if(isset($_POST['nomUtil']) && isset($_POST['mdp'])){
                 try{
-                    $linkpdo = new PDO("mysql:host=mysql-volleytrack.alwaysdata.net;dbname=volleytrack_bd","385425","3wA(8#Py");
+                    $linkpdo = new PDO("mysql:host=mysql-volleytrack.alwaysdata.net;dbname=volleytrack_bd","385425","\$iutinfo");
                 }
                 catch(Exception $e){
                     die("Erreur: ".$e->getMessage());
@@ -57,6 +57,6 @@
             }
         }
         ?>
-            </div>
+        </div>
     </body>
 </html>

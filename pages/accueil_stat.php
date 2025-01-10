@@ -17,9 +17,9 @@
                     <div id="menunav">
                         <ul class="menu-list">
                             <img class="headerlogo" src="photo/Headerlogo.png">
-                            <li><a class="appui" href="#">Accueil</a></li>
-                            <li><a href="Equipe.html">Equipe</a></li>
-                            <li><a href="Match.html">Matchs</a></li>
+                            <li><a class="appui" href="#">Statistiques</a></li>
+                            <li><a href="Gestion_joueurs.php">Joueurs</a></li>
+                            <li><a href="sasie_match.php">Matchs</a></li>
                         </ul>
                     </div>
                 </header>
@@ -140,12 +140,16 @@
                     ")->fetchAll(PDO::FETCH_COLUMN);
                 
                     // Calculer les sélections consécutives
-                    $currentConsecutives = 1;
+                    $currentConsecutives = 0;
                     $i=0;
-                    //Tant que la dernière date du joueur est celle du dernier match joué, on continue
-                    while($datesjoueurs[$i]==$datesmatch[$i] && $i<count($datesjoueurs)-1){
-                        $currentConsecutives++;
-                        $i++;
+                    //Vérifie si un joueur a participé à un match
+                    if (count($datesjoueurs)-1!=-1) {
+                        $currentConsecutives = 1;
+                        //Tant que la dernière date du joueur est celle du dernier match joué, on continue
+                        while($datesjoueurs[$i]==$datesmatch[$i] && $i<count($datesjoueurs)-1){
+                            $currentConsecutives++;
+                            $i++;
+                        }
                     }
                     $selectionsConsecutives[$idJoueur] = $currentConsecutives;
                 
