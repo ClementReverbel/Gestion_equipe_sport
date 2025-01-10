@@ -44,9 +44,8 @@
                     //Si le mot de passe correspond au hachage : ouverture de la page d'accueil
                     if(password_verify($_POST['mdp'],$resultat['mdp'])){
                         $_SESSION["login"]=$_POST['nomUtil'];
-                        echo("Correct");
-                        //header('Location:**');
-                        //exit();
+                        header('Location:pages/accueil_stat.php');
+                        exit();
                     } else {
                     //Si l'utilisateur n'est pas trouvé dans la base de données ou que le mot de passe est incorrect :
                     //Affichage d'une erreur adéquat

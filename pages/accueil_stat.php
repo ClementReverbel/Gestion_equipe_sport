@@ -66,7 +66,7 @@
                         </tr>
                     </table>";
                 
-                $joueurs = $linkpdo->query("
+                    $joueurs = $linkpdo->query("
                     SELECT 
                         j.idJoueur,
                         j.Nom,
@@ -90,7 +90,7 @@
                             FROM participer 
                             WHERE participer.idJoueur = j.idJoueur
                         ) AS Moyenne_note,
-                        (ROUND((
+                        (ROUND(( 
                             SELECT COUNT(*)
                             FROM participer p, matchs m
                             WHERE p.idJoueur = j.idJoueur 
@@ -103,24 +103,54 @@
                         ) * 100, 0)) AS Pourcentage_gagne
                     FROM joueurs AS j
                     GROUP BY j.idJoueur
-                    ");
+                ");
+                
+                echo "
+                <table>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Statut</th>
+                        <th>Poste Préféré</th>
+                        <th>Total Sélections (Titulaire)</th>
+                        <th>Total Sélections (Remplaçant)</th>
+                        <th>Moyenne des Évaluations</th>
+                        <th>% Matchs Gagnés</th>
+                        <th>Sélections Consécutives</th>
+                    </tr>";
 
-                    // Affichage des données
+                // Calcul des sélections consécutives
+                $selectionsConsecutives = [];
+                while ($joueur = $joueurs->fetch(PDO::FETCH_ASSOC)) {
+                    $idJoueur = $joueur['idJoueur'];
+                
+                    // Récupérer les dates des matchs triées pour ce joueur
+                    $datesjoueurs = $linkpdo->query("
+                        SELECT Date_heure_match
+                        FROM participer
+                        WHERE idJoueur = $idJoueur 
+                        ORDER BY Date_heure_match DESC
+                    ")->fetchAll(PDO::FETCH_COLUMN);
+
+                    // Récupère toutes les dates des matchs joués
+                    $datesmatch = $linkpdo->query("
+                        SELECT DISTINCT Date_heure_match
+                        FROM participer
+                        ORDER BY Date_heure_match DESC
+                    ")->fetchAll(PDO::FETCH_COLUMN);
+                
+                    // Calculer les sélections consécutives
+                    $currentConsecutives = 1;
+                    $i=0;
+                    //Tant que la dernière date du joueur est celle du dernier match joué, on continue
+                    while($datesjoueurs[$i]==$datesmatch[$i] && $i<count($datesjoueurs)-1){
+                        $currentConsecutives++;
+                        $i++;
+                    }
+                    $selectionsConsecutives[$idJoueur] = $currentConsecutives;
+                
+                    // Affichage
                     echo "
-                    <table>
-                        <tr>
-                            <th>Nom</th>
-                            <th>Prénom</th>
-                            <th>Statut</th>
-                            <th>Poste Préféré</th>
-                            <th>Total Sélections (Titulaire)</th>
-                            <th>Total Sélections (Remplaçant)</th>
-                            <th>Moyenne des Évaluations</th>
-                            <th>% Matchs Gagnés</th>
-                        </tr>";
-
-                    while ($joueur = $joueurs->fetch(PDO::FETCH_ASSOC)) {
-                        echo "
                         <tr>
                             <td>{$joueur['Nom']}</td>
                             <td>{$joueur['Prenom']}</td>
@@ -130,8 +160,9 @@
                             <td>{$joueur['Total_remplacant']}</td>
                             <td>{$joueur['Moyenne_note']}</td>
                             <td>{$joueur['Pourcentage_gagne']}%</td>
+                            <td>{$selectionsConsecutives[$idJoueur]}</td>
                         </tr>";
-                    }
+                }
 
                     echo "</table>";
                 } catch (Exception $e) {
