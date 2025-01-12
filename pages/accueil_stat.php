@@ -10,16 +10,22 @@
     </head>
         <?php if (!isset($_SESSION["login"])){ ?>
             <p>Vous devez vous connecter d'abord</p>
-            <a href="../**.php">Lien vers la page de connexion</a>
+            <a href="../index.php">Lien vers la page de connexion</a>
         <?php 
             } else { ?>
                 <header id="myHeader">
                     <div id="menunav">
                         <ul class="menu-list">
                             <img class="headerlogo" src="photo/Headerlogo.png">
+<<<<<<< Updated upstream
                             <li><a class="appui" href="#">Accueil</a></li>
                             <li><a href="Equipe.html">Equipe</a></li>
                             <li><a href="Match.html">Matchs</a></li>
+=======
+                            <li><a class="appui" href="#">Statistiques</a></li>
+                            <li><a href="Gestion_joueurs.php">Joueurs</a></li>
+                            <li><a href="saisie_match.php">Matchs</a></li>
+>>>>>>> Stashed changes
                         </ul>
                     </div>
                 </header>
