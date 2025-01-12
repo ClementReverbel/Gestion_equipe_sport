@@ -25,7 +25,6 @@
                             <li><a class="appui" href="#">Statistiques</a></li>
                             <li><a href="Gestion_joueurs.php">Joueurs</a></li>
                             <li><a href="saisie_match.php">Matchs</a></li>
->>>>>>> Stashed changes
                         </ul>
                     </div>
                 </header>
