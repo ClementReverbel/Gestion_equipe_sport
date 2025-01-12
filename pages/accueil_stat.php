@@ -10,7 +10,7 @@
     </head>
         <?php if (!isset($_SESSION["login"])){ ?>
             <p>Vous devez vous connecter d'abord</p>
-            <a href="../**.php">Lien vers la page de connexion</a>
+            <a href="../index.php">Lien vers la page de connexion</a>
         <?php 
             } else { ?>
                 <header id="myHeader">
