@@ -22,7 +22,7 @@
                     </li>
                     <li>
                         <label>Mot de pase : </label>
-                        <input type="text" name="mdp" required>
+                        <input type="password" name="mdp" required>
                     </li>
                     <input type="submit" name="submdp" value="Entrer"\>
                 </form>
