@@ -19,9 +19,9 @@ $dateHeureMatch = $_GET['Date_heure_match'];
 // Récupération des joueurs déjà sélectionnés pour ce match
 $requete = $linkpdo->prepare("
     SELECT p.idJoueur, p.Poste, p.Role_titulaire, CONCAT(j.Nom, ' ', j.Prenom) AS NomComplet
-    FROM participer p
-    INNER JOIN joueurs j ON p.idJoueur = j.idJoueur
+    FROM participer p, joueurs j
     WHERE p.Date_heure_match = :Date_heure_match
+    AND p.idJoueur = j.idJoueur
 ");
 $requete->execute([':Date_heure_match' => $dateHeureMatch]);
 $joueursSelectionnes = $requete->fetchAll(PDO::FETCH_ASSOC);
@@ -40,7 +40,18 @@ $listeJoueurs = $requeteJoueurs->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="utf-8">
     <title>Modifier Joueurs du Match</title>
+    <link href="../style/style.css" rel="stylesheet">
 </head>
+<header id="myHeader">
+    <div id="menunav">
+        <ul class="menu-list">
+            <img class="headerlogo" src="photo/Headerlogo.png">
+            <li><a href="#">Statistiques</a></li>
+            <li><a href="Gestion_joueurs_matchs.php">Joueurs</a></li>
+            <li><a href="saisie_feuille_match.php.php"> Matchs</a></li>
+        </ul>
+    </div>
+</header>
 <body>
     <h1>Modification des Joueurs pour le Match</h1>
     <p>Match sélectionné : <?= $dateHeureMatch ?></p>

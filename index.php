@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <title>Gestion volley : connexion</title>
-        <link href="style/style_connexion.css" rel="stylesheet">
+        <link href="style/style.css" rel="stylesheet">
     </head>
     <body>
         <!-- Affichage du fromulaire si l'utilisateur n'a pas de session en cours -->
@@ -55,6 +55,8 @@
                     echo("Utilisateur inconnu");
                 }
             }
+        } else {
+            header("Location:pages/accueil_stat.php");
         }
         ?>
         </div>

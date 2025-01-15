@@ -3,11 +3,21 @@
 ?>
 <!DOCTYPE html>
 <html lang="fr">
-<head>
+    <head>
         <meta charset="utf-8">
         <title>Gestion volley : Gestion joueurs/matchs</title>
-        <link href="style/style_connexion.css" rel="stylesheet">
+        <link href="../style/style.css" rel="stylesheet">
     </head>
+    <header id="myHeader">
+        <div id="menunav">
+            <ul class="menu-list">
+                <img class="headerlogo" src="photo/Headerlogo.png">
+                <li><a href="accueil_stat.php">Statistiques</a></li>
+                <li><a class="appui" href="#">Joueurs</a></li>
+                <li><a href="saisie_feuille_match.php.php">Matchs</a></li>
+            </ul>
+        </div>
+    </header>
     <body>
         <!-- formulaire de création d'un joueur -->
         <div id ="ajout_joueur">
@@ -62,7 +72,7 @@
             isset($_POST['tailleJ']) && isset($_POST['poid']) && 
             isset($_POST['commentaire']) && isset($_POST['statut'])){
                 //Connexion à la bs
-                $linkpdo = new PDO("mysql:host=localhost;dbname=volleytrack_bd","root","");
+                $linkpdo = new PDO("mysql:host=mysql-volleytrack.alwaysdata.net;dbname=volleytrack_bd", "385425", "\$iutinfo");
                 //Insertion du nouveau joueur
                 $requete = $linkpdo->prepare('INSERT INTO joueurs(Numéro_de_licence,Nom,Prenom,Date_de_naissance ,Taille,Poids,Commentaire,Statut)
                 VALUES (:num,:Nom,:Prenom,:Date_de_naissance ,:Taille, :Poids,:Commentaire,:Statut)');
@@ -91,7 +101,7 @@
     <?php
     try {
         //Connexion à la bd
-        $linkpdo = new PDO("mysql:host=localhost;dbname=volleytrack_bd", "root", "");
+        $linkpdo = new PDO("mysql:host=mysql-volleytrack.alwaysdata.net;dbname=volleytrack_bd", "385425", "\$iutinfo");
 
         //Si l'utilisateur veux recherher
         if (isset($_POST['rech']) && !empty($_POST['rechNumLic'])) {
@@ -210,23 +220,23 @@
                                     FROM joueurs");
 
         while ($joueur = $joueurs->fetch(PDO::FETCH_ASSOC)) {
-                    echo "
-                        <tr>
-                            <td>{$joueur['Numéro_de_licence']}</td>
-                            <td>{$joueur['Nom']}</td>
-                            <td>{$joueur['Prenom']}</td>
-                            <td>{$joueur['Date_de_naissance']}</td>
-                            <td>{$joueur['Taille']}</td>
-                            <td>{$joueur['Poids']}</td>
-                            <td>{$joueur['Commentaire']}</td>
-                            <td>{$joueur['Statut']}</td>
-                        </tr>";
-                }
+                echo "
+                    <tr>
+                        <td>{$joueur['Numéro_de_licence']}</td>
+                        <td>{$joueur['Nom']}</td>
+                        <td>{$joueur['Prenom']}</td>
+                        <td>{$joueur['Date_de_naissance']}</td>
+                        <td>{$joueur['Taille']}</td>
+                        <td>{$joueur['Poids']}</td>
+                        <td>{$joueur['Commentaire']}</td>
+                        <td>{$joueur['Statut']}</td>
+                    </tr>";
+            }
 
-                    echo "</table>";
-                } catch (Exception $e) {
-                    die("Erreur : " . $e->getMessage());
-                }
-            ?>
+                echo "</table>";
+            } catch (Exception $e) {
+                die("Erreur : " . $e->getMessage());
+            }
+        ?>
     </body>
 </html>

@@ -37,31 +37,18 @@ $dateHeureMatch = $_GET['Date_heure_match'];
 <head>
     <meta charset="utf-8">
     <title>Ajouter Joueurs au Match</title>
-    <script>
-        // Fonction pour afficher les spécifications d'un joueur
-        function afficherDetailsJoueur(joueurId, detailDivId) {
-            const joueurs = <?= json_encode($listeJoueurs) ?>;
-
-            // Trouver le joueur sélectionné
-            const joueur = joueurs.find(j => j.idJoueur == joueurId);
-
-            // Sélectionner le div d'affichage des détails
-            const detailsDiv = document.getElementById(detailDivId);
-
-            // Afficher les détails ou vider le div si aucun joueur n'est sélectionné
-            if (joueur) {
-                detailsDiv.innerHTML = `
-                    <p><strong>Taille :</strong> ${joueur.Taille} cm</p>
-                    <p><strong>Poids :</strong> ${joueur.Poids} kg</p>
-                    <p><strong>Note Moyenne :</strong> ${joueur.Moyenne_note} /10</p>
-                    <p><strong>Commentaire :</strong> ${joueur.Commentaire}</p>
-                `;
-            } else {
-                detailsDiv.innerHTML = "";
-            }
-        }
-    </script>
+    <link href="../style/style.css" rel="stylesheet">
 </head>
+<header id="myHeader">
+    <div id="menunav">
+        <ul class="menu-list">
+            <img class="headerlogo" src="photo/Headerlogo.png">
+            <li><a href="#">Statistiques</a></li>
+            <li><a href="Gestion_joueurs_matchs.php">Joueurs</a></li>
+            <li><a href="saisie_feuille_match.php.php"> Matchs</a></li>
+        </ul>
+    </div>
+</header>
 <body>
     <h1>Saisie des joueurs pour le match</h1>
     <p>Match sélectionné : <?= $dateHeureMatch ?></p>
@@ -71,7 +58,7 @@ $dateHeureMatch = $_GET['Date_heure_match'];
             $isRequired = $i <= 6 ? "required" : ""; ?>
             <div>
                 <label for="joueur<?= $i ?>">Joueur <?= $i ?> :</label>
-                <select name="joueurs[]" id="joueur<?= $i ?>" <?= $isRequired ?> onchange="afficherDetailsJoueur(this.value, 'details<?= $i ?>')">
+                <select name="joueurs[]" id="joueur<?= $i ?>" <?= $isRequired ?>>
                     <option value="">-- Sélectionnez un joueur --</option>
                     <?php foreach ($listeJoueurs as $joueur) { ?>
                         <option value="<?= $joueur['idJoueur'] ?>"><?= $joueur['NomComplet'] ?></option>
@@ -97,6 +84,7 @@ $dateHeureMatch = $_GET['Date_heure_match'];
         $joueurs = array_filter($_POST['joueurs']);
         $roles = $_POST['roles'];
 
+        //Vérifie que le joueur ne soit pas présent 2 fois
         if (count($joueurs) !== count(array_unique($joueurs))) {
             echo '<p>Un joueur ne peut pas être sélectionné plusieurs fois.</p>';
             exit;

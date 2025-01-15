@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <title>Gestion volley : accueil</title>
-        <link href="style/style_connexion.css" rel="stylesheet">
+        <link href="../style/style.css" rel="stylesheet">
     </head>
         <?php if (!isset($_SESSION["login"])){ ?>
             <p>Vous devez vous connecter d'abord</p>
@@ -18,8 +18,8 @@
                         <ul class="menu-list">
                             <img class="headerlogo" src="photo/Headerlogo.png">
                             <li><a class="appui" href="#">Statistiques</a></li>
-                            <li><a href="Gestion_joueurs.php">Joueurs</a></li>
-                            <li><a href="sasie_match.php">Matchs</a></li>
+                            <li><a href="Gestion_joueurs_matchs.php">Joueurs</a></li>
+                            <li><a href="saisie_feuille_match.php.php">Matchs</a></li>
                         </ul>
                     </div>
                 </header>

@@ -22,8 +22,9 @@ $matchsNonSelect = $requeteMatchsNonSelect->fetchAll(PDO::FETCH_ASSOC);
 // Récupérer les matchs déjà configurés
 $requeteMatchsSelect = $linkpdo->query("
     SELECT DISTINCT m.Date_heure_match, m.Nom_equipe_adverse 
-    FROM matchs m
-    INNER JOIN participer p ON m.Date_heure_match = p.Date_heure_match
+    FROM matchs m, participer p
+    WHERE  m.Date_heure_match = p.Date_heure_match
+    AND m.Resultat IS NULL
 ");
 $matchsSelect = $requeteMatchsSelect->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -33,7 +34,18 @@ $matchsSelect = $requeteMatchsSelect->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="utf-8">
     <title>Feuille de Match</title>
+    <link href="../style/style.css" rel="stylesheet">
 </head>
+<header id="myHeader">
+    <div id="menunav">
+        <ul class="menu-list">
+            <img class="headerlogo" src="photo/Headerlogo.png">
+            <li><a href="#">Statistiques</a></li>
+            <li><a href="Gestion_joueurs_matchs.php">Joueurs</a></li>
+            <li><a href="#" class="appui"> Matchs</a></li>
+        </ul>
+    </div>
+</header>
 <body>
     <h1>Gestion des Feuilles de Match</h1>
 
