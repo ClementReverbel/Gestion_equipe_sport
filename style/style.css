@@ -60,6 +60,10 @@ form {
     max-width: 400px;
 }
 
+form .tab {
+    width: 80%;
+}
+
 form li {
     list-style: none;
     margin-bottom: 15px;

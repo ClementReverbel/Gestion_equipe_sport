@@ -45,37 +45,56 @@ $dateHeureMatch = $_GET['Date_heure_match'];
             <img class="headerlogo" src="photo/Headerlogo.png">
             <li><a href="#">Statistiques</a></li>
             <li><a href="Gestion_joueurs_matchs.php">Joueurs</a></li>
-            <li><a href="saisie_feuille_match.php.php"> Matchs</a></li>
+            <li><a href="saisie_feuille_match.php">Matchs</a></li>
         </ul>
     </div>
 </header>
 <body>
     <h1>Saisie des joueurs pour le match</h1>
     <p>Match sélectionné : <?= $dateHeureMatch ?></p>
-    <form action="" method="POST">
+    <form action="" method="POST" class="tab">
         <input type="hidden" name="Date_heure_match" value="<?= $dateHeureMatch ?>">
-        <?php for ($i = 1; $i <= 12; $i++) { 
-            $isRequired = $i <= 6 ? "required" : ""; ?>
-            <div>
-                <label for="joueur<?= $i ?>">Joueur <?= $i ?> :</label>
-                <select name="joueurs[]" id="joueur<?= $i ?>" <?= $isRequired ?>>
-                    <option value="">-- Sélectionnez un joueur --</option>
-                    <?php foreach ($listeJoueurs as $joueur) { ?>
-                        <option value="<?= $joueur['idJoueur'] ?>"><?= $joueur['NomComplet'] ?></option>
-                    <?php } ?>
-                </select>
+        <table>
+            <tr>
+                <th>Nom</th>
+                <th>Taille</th>
+                <th>Poids</th>
+                <th>Moyenne des notes</th>
+                <th>Commentaire</th>
+                <th>Rôle</th>
+                <th>Sélectionner</th>
+            </tr>
+            <?php foreach ($listeJoueurs as $joueur) { ?>
+                <tr>
+                    <td><?= $joueur['NomComplet'] ?></td>
+                    <td><?= $joueur['Taille'] ?> cm</td>
+                    <td><?= $joueur['Poids'] ?> kg</td>
+                    <td><?= $joueur['Moyenne_note'] ?></td>
+                    <td><?= $joueur['Commentaire'] ?></td>
+                    <td>
+                        <select name="roles[<?= $joueur['idJoueur'] ?>]">
+                            <option value="">-- Sélectionnez un rôle --</option>
+                            <option value="Attaquant" 
+                                    <?= isset($_POST['roles'][$joueur['idJoueur']]) && $_POST['roles'][$joueur['idJoueur']] == 'Attaquant' ? 'selected' : '' ?>>Attaquant</option>
+                            <option value="Passeur" 
+                                    <?= isset($_POST['roles'][$joueur['idJoueur']]) && $_POST['roles'][$joueur['idJoueur']] == 'Passeur' ? 'selected' : '' ?>>Passeur</option>
+                            <option value="Libero" 
+                                    <?= isset($_POST['roles'][$joueur['idJoueur']]) && $_POST['roles'][$joueur['idJoueur']] == 'Libero' ? 'selected' : '' ?>>Libero</option>
+                            <option value="Centre" 
+                                    <?= isset($_POST['roles'][$joueur['idJoueur']]) && $_POST['roles'][$joueur['idJoueur']] == 'Centre' ? 'selected' : '' ?>>Centre</option>
+                            <option value="Remplaçant" 
+                                    <?= isset($_POST['roles'][$joueur['idJoueur']]) && $_POST['roles'][$joueur['idJoueur']] == 'Remplaçant' ? 'selected' : '' ?>>Remplaçant</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="joueurs[]" value="<?= $joueur['idJoueur'] ?>" 
+                                id="joueur<?= $joueur['idJoueur'] ?>"
+                                <?= isset($_POST['joueurs']) && in_array($joueur['idJoueur'], $_POST['joueurs']) ? 'checked' : '' ?> />
+                    </td>
+                </tr>
+            <?php } ?>
+        </table>
 
-                <label for="role<?= $i ?>">Rôle :</label>
-                <select name="roles[]" id="role<?= $i ?>" <?= $isRequired ?>>
-                    <option value="">-- Sélectionnez un rôle --</option>
-                    <option value="Attaquant">Attaquant</option>
-                    <option value="Passeur">Passeur</option>
-                    <option value="Libero">Libero</option>
-                    <option value="Centre">Centre</option>
-                    <option value="Remplaçant">Remplaçant</option>
-                </select>
-            </div>
-        <?php } ?>
         <button type="submit">Valider la sélection</button>
     </form>
 
@@ -84,33 +103,32 @@ $dateHeureMatch = $_GET['Date_heure_match'];
         $joueurs = array_filter($_POST['joueurs']);
         $roles = $_POST['roles'];
 
-        //Vérifie que le joueur ne soit pas présent 2 fois
+        // Vérifie que le joueur ne soit pas présent 2 fois
         if (count($joueurs) !== count(array_unique($joueurs))) {
             echo '<p>Un joueur ne peut pas être sélectionné plusieurs fois.</p>';
             exit;
         }
 
+        // Préparer l'insertion dans la base de données
         $requete = $linkpdo->prepare("
             INSERT INTO participer (idJoueur, Date_heure_match, Role_titulaire, Poste)
             VALUES (:idJoueur, :Date_heure_match, :Role_titulaire, :Poste)
         ");
 
-        foreach ($joueurs as $index => $idJoueur) {
-            if (!empty($idJoueur)) {
-                $role = $roles[$index];
-                $roleTitulaire = ($role !== 'Remplaçant') ? 1 : 0;
+        foreach ($joueurs as $idJoueur) {
+            $role = $roles[$idJoueur];
+            $roleTitulaire = ($role !== 'Remplaçant') ? 1 : 0;
 
-                $requete->execute([
-                    ':idJoueur' => $idJoueur,
-                    ':Date_heure_match' => $dateHeureMatch,
-                    ':Role_titulaire' => $roleTitulaire,
-                    ':Poste' => $role
-                ]);
-            }
+            $requete->execute([
+                ':idJoueur' => $idJoueur,
+                ':Date_heure_match' => $dateHeureMatch,
+                ':Role_titulaire' => $roleTitulaire,
+                ':Poste' => $role
+            ]);
         }
 
         echo "<p>Sélection des joueurs enregistrée avec succès pour le match du $dateHeureMatch.</p>";
-        echo '<a href="feuille_match.php">Retour à la sélection des matchs</a>';
+        echo '<a href="saisie_feuille_match.php">Retour à la sélection des matchs</a>';
     }
     ?>
 </body>

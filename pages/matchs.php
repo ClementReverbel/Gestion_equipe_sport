@@ -6,9 +6,9 @@
 <head>
         <meta charset="utf-8">
         <title>Gestion volley : Gestion joueurs/matchs</title>
-        <link href="style/style_connexion.css" rel="stylesheet">
+        <link href="../style/style.css" rel="stylesheet">
     </head>
-    <?php if (isset($_SESSION["login"])){ ?>
+    <?php if (!isset($_SESSION["login"])){ ?>
         <p>Vous devez vous connecter d'abord</p>
         <a href="../**.php">Lien vers la page de connexion</a>
     <?php 
@@ -51,7 +51,8 @@
                 </div>
                 <?php
                 try{
-                    $linkpdo = new PDO("mysql:host=localhost;dbname=volleytrack_bd","root","");
+                    $linkpdo = new PDO("mysql:host=mysql-volleytrack.alwaysdata.net;dbname=volleytrack_bd", "385425", "\$iutinfo");
+
                     //si le bouton à d'envoi à été préssé et que le formulaire est remplit
                     if(isset($_POST['equipeadv']) && 
                     isset($_POST['date']) && isset($_POST['heure']) && 

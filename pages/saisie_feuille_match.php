@@ -24,7 +24,7 @@ $requeteMatchsSelect = $linkpdo->query("
     SELECT DISTINCT m.Date_heure_match, m.Nom_equipe_adverse 
     FROM matchs m, participer p
     WHERE  m.Date_heure_match = p.Date_heure_match
-    AND m.Resultat IS NULL
+    AND m.Score IS NULL
 ");
 $matchsSelect = $requeteMatchsSelect->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -40,7 +40,7 @@ $matchsSelect = $requeteMatchsSelect->fetchAll(PDO::FETCH_ASSOC);
     <div id="menunav">
         <ul class="menu-list">
             <img class="headerlogo" src="photo/Headerlogo.png">
-            <li><a href="#">Statistiques</a></li>
+            <li><a href="accueil_stat.php">Statistiques</a></li>
             <li><a href="Gestion_joueurs_matchs.php">Joueurs</a></li>
             <li><a href="#" class="appui"> Matchs</a></li>
         </ul>
