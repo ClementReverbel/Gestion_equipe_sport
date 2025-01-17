@@ -135,18 +135,24 @@
                                 </tr>";
                         } else {
                             echo "<tr>
-                                <td>{$date_heure}</td>
-                                <td>{$match['Nom_equipe_adverse']}</td>
-                                <td>{$domicile}</td>
-                                <td>{$match['Score']}</td>
-                                <td>{$gagne}</td>
-                                <td>
-                                    <form method='POST' action=''>
-                                        <input type='hidden' name='id_match' value='{$match['id_match']}'>
-                                        <input type='submit' name='supprimer' value='Supprimer'>
-                                    </form>
-                                </td>
-                            </tr>";
+                                    <td>{$date_heure}</td>
+                                    <td>{$match['Nom_equipe_adverse']}</td>
+                                    <td>{$domicile}</td>
+                                    <td>{$match['Score']}</td>
+                                    <td>{$gagne}</td>
+                                    <td>
+                                        <form method='POST' action=''>
+                                            <input type='hidden' name='id_match_modif' value='{$match['id_match']}'>
+                                            <input type='submit' name='modifier' value='Modifier'>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form method='POST' action=''>
+                                            <input type='hidden' name='id_match' value='{$match['id_match']}'>
+                                            <input type='submit' name='supprimer' value='Supprimer'>
+                                        </form>
+                                    </td>
+                                </tr>";
                         }
                     }
                     echo "</table>";
