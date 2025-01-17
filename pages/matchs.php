@@ -24,7 +24,7 @@
                 </div>
             </header>
             <body>
-                <!-- formulaire de création d'un joueur -->
+                <!-- formulaire de création d'un match -->
                 <div id ="creation_match">
                     <h3>Créer un match</h2>
                     <form method="POST" action="">
@@ -58,10 +58,11 @@
                     isset($_POST['date']) && isset($_POST['heure']) && 
                     isset($_POST['domicile'])){
                     //Connexion à la bs
-                    //Insertion du nouveau joueur
+                    //Insertion du nouveau match
                     $requete = $linkpdo->prepare('INSERT INTO matchs(Date_heure_match,Nom_equipe_adverse,Rencontre_domicile)
                     VALUES (:date_time,:equipeadv,:domicile)');
 
+                    //Transformation de la date est de l'heure rentrée en type Datetime
                     $heure =  $_POST['heure'];
                     $date = $_POST['date'];
                     $date_time = ($date.' '.$heure.':00');
@@ -70,6 +71,7 @@
                     'domicile'=>$_POST['domicile']));
                     }
                     
+                    //Création du tableau rempli avec les matchs
                     echo "<table>
                         <tr>
                             <th>Date et heure du match</th>
@@ -78,9 +80,11 @@
                             <th>Score</th>
                             <th>Résultat</th>
                         </tr>";
+                    //remplissage du tableau
                     $matchs = $linkpdo->query("SELECT * FROM matchs");
                     while ($match = $matchs->fetch(PDO::FETCH_ASSOC)) {
                         $domicile = "";
+                        //Changement du type boolean en oui ou non
                         if($match['Rencontre_domicile'] === 1){
                             $domicile = "OUI";
                         } else {
@@ -88,11 +92,13 @@
                         }
 
                         $gagne = "";
+                        //Chagement du type boolean en Gagné ou perdu
                         if($match['Resultat'] === 1){
                             $gagne = "GAGNÉ";
                         } else if($match['Resultat'] === 0){
                             $gagne = "PERDU";
                         }
+                        //Création des lignes
                         echo "
                             <tr>
                                 <td>{$match['Date_heure_match']}</td>
