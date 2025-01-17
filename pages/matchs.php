@@ -6,7 +6,7 @@
 <head>
         <meta charset="utf-8">
         <title>Gestion volley : Gestion joueurs/matchs</title>
-        <link href="style/style_connexion.css" rel="stylesheet">
+        <link href="style/style.css" rel="stylesheet">
     </head>
     <?php if (isset($_SESSION["login"])){ ?>
         <p>Vous devez vous connecter d'abord</p>
@@ -133,6 +133,33 @@
                                     <td>{$match['Score']}</td>
                                     <td>{$gagne}</td>
                                 </tr>";
+                            //Si le bouton modifié a été pressé sur cette ligne
+                        } elseif(isset($_POST['modifier']) && $_POST['id_match_modif'] == $match['id_match']){
+                            //Si la rencotre est à domicile préremplie la checkbox avec la bonne valeur
+                            if($domicile ==="OUI"){
+                                $checked = 'checked';
+                            } else {
+                                $checked = '';
+                            }
+
+                            echo " <tr>
+                                        <form method='POST' action=''>
+                                            <td>
+                                                
+                                                    <input type='date' name='new_date' value='$date_return'>
+                                                    <input type='time' name='new_time' value='$timeFormatted'>
+                                            <td>
+                                                    <input type='text' name='new_equipeadv' value='{$match['Nom_equipe_adverse']}'>
+                                            </td>
+                                            <td>
+                                                    <input type='checkbox' name='new_domicile'".$checked.">
+                                            </td>
+                                            <td>
+                                                    <input type='hidden' name='id_match_modif_ok' value='{$match['id_match']}'>
+                                                    <input type='submit' name='ok_modifier' value='Ok'>
+                                            </td>
+                                        </form>
+                                    </tr>";
                         } else {
                             echo "<tr>
                                     <td>{$date_heure}</td>
@@ -156,6 +183,7 @@
                         }
                     }
                     echo "</table>";
+                    //Si le bouton supprimé a été pressé
                     if (isset($_POST['supprimer']) && isset($_POST['id_match'])) {
                         $id_match = $_POST['id_match'];
                     
@@ -169,8 +197,37 @@
                             echo "Erreur lors de la suppression du match.";
                         }
                     }
+                    //Si le bouton modifié a été pressé 
+                    if (isset($_POST['ok_modifier'])) {
+                        //On récuprère l'id du match à modifié
+                        $id_match = $_POST['id_match_modif_ok'];
+                        if(isset($_POST['new_equipeadv']) && isset($_POST['new_date']) && isset($_POST['new_time'])){
+                                //Update du match
+                                $requete = $linkpdo->prepare('UPDATE matchs SET Date_heure_match = :date_time ,Nom_equipe_adverse = :equipeadv, Rencontre_domicile = :domicile WHERE id_match = :id_match');
+
+                                //Transformation de la date est de l'heure rentrée en type Datetime
+                                $heure =  $_POST['new_time'];
+                                $date = $_POST['new_date'];
+                                $date_time = ($date.' '.$heure.':00');
+                            
+                                if(isset($_POST['new_domicile'])){
+                                    $domicile = 1;
+                                } else {
+                                    $domicile = 0;
+                                }
+                                //liaison du formulaire à la requete SQL
+                                if($requete->execute(array('date_time'=>$date_time,'equipeadv'=>$_POST['new_equipeadv'],
+                                   'domicile'=>$domicile, 'id_match'=>$id_match))){
+                                   echo "Le match à été modifié avec succès.";
+                                } else {
+                                    echo "problème lors de la modification";
+                                }
+                                
+                    }
+
                 }
-                catch(Exception $e){
+
+            } catch(Exception $e){
                     echo "Erreur: ".$e->getMessage();
                 }
         }
