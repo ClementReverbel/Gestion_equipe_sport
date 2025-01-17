@@ -6,9 +6,9 @@
 <head>
         <meta charset="utf-8">
         <title>Gestion volley : Gestion joueurs/matchs</title>
-        <link href="../style/style.css" rel="stylesheet">
+        <link href="style/style_connexion.css" rel="stylesheet">
     </head>
-    <?php if (!isset($_SESSION["login"])){ ?>
+    <?php if (isset($_SESSION["login"])){ ?>
         <p>Vous devez vous connecter d'abord</p>
         <a href="../**.php">Lien vers la page de connexion</a>
     <?php 
@@ -24,7 +24,7 @@
                 </div>
             </header>
             <body>
-                <!-- formulaire de création d'un match -->
+                <!-- formulaire de création d'un joueur -->
                 <div id ="creation_match">
                     <h3>Créer un match</h2>
                     <form method="POST" action="">
@@ -51,12 +51,10 @@
                 </div>
                 <?php
                 try{
-                    $linkpdo = new PDO("mysql:host=mysql-volleytrack.alwaysdata.net;dbname=volleytrack_bd", "385425", "\$iutinfo");
-
+                    $linkpdo = new PDO("mysql:host=localhost;dbname=volleytrack_bd","root","");
                     //si le bouton à d'envoi à été préssé et que le formulaire est remplit
                     if(isset($_POST['equipeadv']) && 
-                    isset($_POST['date']) && isset($_POST['heure']) && 
-                    isset($_POST['domicile'])){
+                    isset($_POST['date']) && isset($_POST['heure'])){
                     //Connexion à la bs
                     //Insertion du nouveau match
                     $requete = $linkpdo->prepare('INSERT INTO matchs(Date_heure_match,Nom_equipe_adverse,Rencontre_domicile)
@@ -66,12 +64,18 @@
                     $heure =  $_POST['heure'];
                     $date = $_POST['date'];
                     $date_time = ($date.' '.$heure.':00');
+                    
+                    if(isset($_POST['domicile'])){
+                        $domicile = 1;
+                    } else {
+                        $domicile = 0;
+                    }
                    //liaison du formulaire à la requete SQL
                     $requete->execute(array('date_time'=>$date_time,'equipeadv'=>$_POST['equipeadv'],
-                    'domicile'=>$_POST['domicile']));
+                    'domicile'=>$domicile));
                     }
-                    
-                    //Création du tableau rempli avec les matchs
+
+                     //Création du tableau rempli avec les matchs
                     echo "<table>
                         <tr>
                             <th>Date et heure du match</th>
@@ -98,21 +102,72 @@
                         } else if($match['Resultat'] === 0){
                             $gagne = "PERDU";
                         }
-                        //Création des lignes
-                        echo "
-                            <tr>
-                                <td>{$match['Date_heure_match']}</td>
+                        
+                        //Pour mieux afficher les données dans le tableau je transforme mon type Datetime de SQL 
+                        //en quelque chose de plus lisible
+                        $date_heure_return = $match['Date_heure_match'];
+                        list($date_return, $time_return) = explode(' ', $date_heure_return);
+
+                        // Change la date en dd-mm-yyyy
+                        $dateFormatted = date('d-m-Y', strtotime($date_return));
+
+                        // Garder uniquement l'heure hh:mm
+                        $timeFormatted = substr($time_return, 0, 5);
+                        
+                        //Concaténation pour l'affichage
+                        $date_heure = $dateFormatted." ".$timeFormatted;
+                        
+                        //Date actuelle sous forme de tableau
+                        $date_array = getdate();
+
+                        //Récupération des bonnes informations de la date actuelle
+                        $date_actu = $date_array['mday']."-".$date_array['mon']."-".$date_array['year'];
+
+                        //On vérifie si le match à déjà été joué pour savoir si on peu supprimer le match ou pas
+                        if (strtotime($date_actu) > strtotime($dateFormatted)){
+                            echo "
+                                <tr>
+                                    <td>{$date_heure}</td>
+                                    <td>{$match['Nom_equipe_adverse']}</td>
+                                    <td>{$domicile}</td>
+                                    <td>{$match['Score']}</td>
+                                    <td>{$gagne}</td>
+                                </tr>";
+                        } else {
+                            echo "<tr>
+                                <td>{$date_heure}</td>
                                 <td>{$match['Nom_equipe_adverse']}</td>
                                 <td>{$domicile}</td>
                                 <td>{$match['Score']}</td>
                                 <td>{$gagne}</td>
+                                <td>
+                                    <form method='POST' action=''>
+                                        <input type='hidden' name='id_match' value='{$match['id_match']}'>
+                                        <input type='submit' name='supprimer' value='Supprimer'>
+                                    </form>
+                                </td>
                             </tr>";
+                        }
                     }
                     echo "</table>";
+                    if (isset($_POST['supprimer']) && isset($_POST['id_match'])) {
+                        $id_match = $_POST['id_match'];
+                    
+                        // Préparer la requête de suppression
+                        $requete = $linkpdo->prepare('DELETE FROM matchs WHERE id_match = ?');
+                    
+                        // Exécuter la requête
+                        if ($requete->execute(array($id_match))) {
+                            echo "Le match à été supprimé avec succès.";
+                        } else {
+                            echo "Erreur lors de la suppression du match.";
+                        }
+                    }
                 }
                 catch(Exception $e){
                     echo "Erreur: ".$e->getMessage();
                 }
         }
                 ?>
+
 </html>
