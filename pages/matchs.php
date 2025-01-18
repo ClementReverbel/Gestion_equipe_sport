@@ -47,9 +47,16 @@
                         </li>
                         <input type="submit" name="submdp" value="Créer"\>
                     </form>
-
+                </div>
+                <div>
+                    <form method="POST" action="">
+                        <button value="feuille">Modifier mes matchs</button>
+                    </form>
                 </div>
                 <?php
+                    if(isset($_POST['feuille'])){
+                        header("Location:saisie_feuille_match.php");
+                    }
                 try{
                     $linkpdo = new PDO("mysql:host=mysql-volleytrack.alwaysdata.net;dbname=volleytrack_bd", "385425", "\$iutinfo");
                     //si le bouton à d'envoi à été préssé et que le formulaire est remplit
@@ -197,7 +204,7 @@
                             echo "Erreur lors de la suppression du match.";
                         }
                     }
-                    //Si le bouton modifié a été pressé 
+                    //Si le bouton modifié a été pressé
                     if (isset($_POST['ok_modifier'])) {
                         //On récuprère l'id du match à modifié
                         $id_match = $_POST['id_match_modif_ok'];
