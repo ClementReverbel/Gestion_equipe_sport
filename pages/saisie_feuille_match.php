@@ -10,10 +10,10 @@ $linkpdo = new PDO("mysql:host=mysql-volleytrack.alwaysdata.net;dbname=volleytra
 
 // Récupérer les matchs non sélectionnés
 $requeteMatchsNonSelect = $linkpdo->query("
-    SELECT Date_heure_match, Nom_equipe_adverse 
+    SELECT id_match, Date_heure_match, Nom_equipe_adverse 
     FROM matchs 
-    WHERE Date_heure_match NOT IN (
-        SELECT DISTINCT Date_heure_match 
+    WHERE id_match NOT IN (
+        SELECT DISTINCT idMatch 
         FROM participer
     )
 ");
@@ -21,9 +21,9 @@ $matchsNonSelect = $requeteMatchsNonSelect->fetchAll(PDO::FETCH_ASSOC);
 
 // Récupérer les matchs déjà configurés
 $requeteMatchsSelect = $linkpdo->query("
-    SELECT DISTINCT m.Date_heure_match, m.Nom_equipe_adverse 
+    SELECT DISTINCT m.id_match, m.Date_heure_match, m.Nom_equipe_adverse 
     FROM matchs m, participer p
-    WHERE  m.Date_heure_match = p.Date_heure_match
+    WHERE  m.id_match = p.idMatch
     AND m.Score IS NULL
 ");
 $matchsSelect = $requeteMatchsSelect->fetchAll(PDO::FETCH_ASSOC);
@@ -53,10 +53,10 @@ $matchsSelect = $requeteMatchsSelect->fetchAll(PDO::FETCH_ASSOC);
     <h2>Nouveau Match</h2>
     <form action="ajouter_joueur_match.php" method="GET">
         <label for="match">Choisir un match :</label>
-        <select name="Date_heure_match" id="match" required>
+        <select name="id_match" id="match" required>
             <option value="">-- Sélectionnez un match --</option>
             <?php foreach ($matchsNonSelect as $match) { ?>
-                <option value="<?= $match['Date_heure_match'] ?>">
+                <option value="<?= $match['id_match'] ?>">
                     <?= $match['Date_heure_match'] ?> - <?= $match['Nom_equipe_adverse'] ?>
                 </option>
             <?php } ?>
@@ -68,10 +68,10 @@ $matchsSelect = $requeteMatchsSelect->fetchAll(PDO::FETCH_ASSOC);
     <h2>Modifier un Match Existant</h2>
     <form action="modifier_joueur_match.php" method="GET">
         <label for="matchConfig">Choisir un match configuré :</label>
-        <select name="Date_heure_match" id="matchConfig" required>
+        <select name="id_match" id="matchConfig" required>
             <option value="">-- Sélectionnez un match --</option>
             <?php foreach ($matchsSelect as $match) { ?>
-                <option value="<?= $match['Date_heure_match'] ?>">
+                <option value="<?= $match['id_match'] ?>">
                     <?= $match['Date_heure_match'] ?> - <?= $match['Nom_equipe_adverse'] ?>
                 </option>
             <?php } ?>

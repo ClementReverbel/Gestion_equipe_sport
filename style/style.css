@@ -52,15 +52,11 @@ header .menu-list a:hover {
 
 /* Section des formulaires */
 form {
-    background: white;
+    background: gray;
     padding: 20px;
     margin: 20px auto;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-}
-
-form .tab {
     width: 80%;
 }
 
@@ -146,7 +142,6 @@ button:hover, a:hover {
 .alert {
     padding: 15px;
     margin: 20px auto;
-    max-width: 600px;
     border-radius: 5px;
     text-align: center;
 }

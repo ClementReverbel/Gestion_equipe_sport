@@ -94,7 +94,7 @@
                             SELECT COUNT(*)
                             FROM participer p, matchs m
                             WHERE p.idJoueur = j.idJoueur 
-                            AND m.Date_heure_match=p.Date_heure_match
+                            AND m.id_match=p.idMatch
                             AND m.Resultat = 1
                         ) / (
                             SELECT COUNT(*)
@@ -126,17 +126,17 @@
                 
                     // Récupérer les dates des matchs triées pour ce joueur
                     $datesjoueurs = $linkpdo->query("
-                        SELECT Date_heure_match
+                        SELECT idMatch
                         FROM participer
                         WHERE idJoueur = $idJoueur 
-                        ORDER BY Date_heure_match DESC
+                        ORDER BY idMatch DESC
                     ")->fetchAll(PDO::FETCH_COLUMN);
 
                     // Récupère toutes les dates des matchs joués
                     $datesmatch = $linkpdo->query("
-                        SELECT DISTINCT Date_heure_match
+                        SELECT DISTINCT idMatch
                         FROM participer
-                        ORDER BY Date_heure_match DESC
+                        ORDER BY idMatch DESC
                     ")->fetchAll(PDO::FETCH_COLUMN);
                 
                     // Calculer les sélections consécutives
