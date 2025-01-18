@@ -14,7 +14,7 @@
                 <img class="headerlogo" src="photo/Headerlogo.png">
                 <li><a href="accueil_stat.php">Statistiques</a></li>
                 <li><a class="appui" href="#">Joueurs</a></li>
-                <li><a href="saisie_feuille_match.php">Matchs</a></li>
+                <li><a href="matchs.php">Matchs</a></li>
             </ul>
         </div>
     </header>

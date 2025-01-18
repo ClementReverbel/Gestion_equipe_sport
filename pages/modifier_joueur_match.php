@@ -128,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div id="menunav">
             <ul class="menu-list">
                 <img class="headerlogo" src="photo/Headerlogo.png">
-                <li><a href="#">Statistiques</a></li>
+                <li><a href="accueil_stat.php">Statistiques</a></li>
                 <li><a href="Gestion_joueurs_matchs.php">Joueurs</a></li>
                 <li><a href="saisie_feuille_match.php">Matchs</a></li>
             </ul>
@@ -185,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </tr>
             <?php endforeach; ?>
         </table>
-        <button type="submit">Enregistrer les modifications</button>
+        <button value="" type="submit">Enregistrer les modifications</button>
     </form>
 </body>
 </html>

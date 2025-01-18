@@ -42,7 +42,7 @@ $matchsSelect = $requeteMatchsSelect->fetchAll(PDO::FETCH_ASSOC);
             <img class="headerlogo" src="photo/Headerlogo.png">
             <li><a href="accueil_stat.php">Statistiques</a></li>
             <li><a href="Gestion_joueurs_matchs.php">Joueurs</a></li>
-            <li><a href="#" class="appui"> Matchs</a></li>
+            <li><a href="matchs.php" class="appui"> Matchs</a></li>
         </ul>
     </div>
 </header>
@@ -50,7 +50,7 @@ $matchsSelect = $requeteMatchsSelect->fetchAll(PDO::FETCH_ASSOC);
     <h1>Gestion des Feuilles de Match</h1>
 
     <!-- Section pour les nouveaux matchs -->
-    <h2>Nouveau Match</h2>
+    <h2>Nouvelle feuille de match</h2>
     <form action="ajouter_joueur_match.php" method="GET">
         <label for="match">Choisir un match :</label>
         <select name="id_match" id="match" required>
@@ -65,7 +65,7 @@ $matchsSelect = $requeteMatchsSelect->fetchAll(PDO::FETCH_ASSOC);
     </form>
 
     <!-- Section pour les matchs déjà configurés -->
-    <h2>Modifier un Match Existant</h2>
+    <h2>Modifier une feuille de match existante</h2>
     <form action="modifier_joueur_match.php" method="GET">
         <label for="matchConfig">Choisir un match configuré :</label>
         <select name="id_match" id="matchConfig" required>
@@ -77,6 +77,20 @@ $matchsSelect = $requeteMatchsSelect->fetchAll(PDO::FETCH_ASSOC);
             <?php } ?>
         </select>
         <button type="submit">Modifier</button>
+    </form>
+
+    <h2>Rentrer le score d'une feuille de match</h2>
+    <form action="ajouter_score.php" method="GET">
+        <label for="matchConfig">Choisir un match configuré :</label>
+        <select name="id_match" id="matchConfig" required>
+            <option value="">-- Sélectionnez un match --</option>
+            <?php foreach ($matchsSelect as $match) { ?>
+                <option value="<?= $match['id_match'] ?>">
+                    <?= $match['Date_heure_match'] ?> - <?= $match['Nom_equipe_adverse'] ?>
+                </option>
+            <?php } ?>
+        </select>
+        <button type="submit">Valider</button>
     </form>
 </body>
 </html>

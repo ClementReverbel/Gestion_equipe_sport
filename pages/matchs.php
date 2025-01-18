@@ -18,8 +18,8 @@
                     <ul class="menu-list">
                         <img class="headerlogo" src="photo/Headerlogo.png">
                         <li><a href="accueil_stat.php">Statistiques</a></li>
-                        <li><a class="appui" href="#">Joueurs</a></li>
-                        <li><a href="sasie_match.php">Matchs</a></li>
+                        <li><a  href="Gestion_joueurs_matchs">Joueurs</a></li>
+                        <li><a class='appui' href="#">Matchs</a></li>
                     </ul>
                 </div>
             </header>
@@ -50,7 +50,7 @@
                 </div>
                 <div>
                     <form method="POST" action="">
-                        <button value="feuille">Modifier mes matchs</button>
+                        <input type="submit" name="feuille" value="Modifier mes matchs">
                     </form>
                 </div>
                 <?php
