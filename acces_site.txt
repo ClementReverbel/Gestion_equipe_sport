@@ -6,3 +6,7 @@ mot de passe : $iutinfo
 
 login : brice_arnault 
 mot de passe : vousavezperdu
+
+
+> Condition pour rentrer des données spécifiques
+Le score d'un match ne peut être ajouté que s'il a une feuille de match et que sa date est passée

@@ -2,7 +2,7 @@
 session_start();
 if (!isset($_SESSION["login"])) {
     echo "<p>Vous devez vous connecter d'abord</p>";
-    echo "<a href='../connexion.php'>Lien vers la page de connexion</a>";
+    echo "<a href='../index.php'>Lien vers la page de connexion</a>";
     exit;
 }
 
@@ -113,7 +113,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message = "Erreur lors de l'enregistrement : " . $e->getMessage();
         }
     }
-}
+
+    if (!empty($message)): ?>
+        <!DOCTYPE html>
+        <html lang="fr">
+        <head>
+            <meta charset="utf-8">
+            <title>Modifier Joueurs pour le Match</title>
+            <link href="../style/style.css" rel="stylesheet">
+        </head>
+        <body>
+            <header id="myHeader">
+                <div id="menunav">
+                    <ul class="menu-list">
+                        <img class="headerlogo" src="photo/Headerlogo.png">
+                        <li><a href="accueil_stat.php">Statistiques</a></li>
+                        <li><a href="Gestion_joueurs_matchs.php">Joueurs</a></li>
+                        <li><a href="matchs.php">Matchs</a></li>
+                    </ul>
+                </div>
+            </header>
+            <div class="message"><?= $message ?></div>
+            <div>
+                <form method="POST" action="">
+                    <input type="submit" name="feuille" value="Revenir à la saise de feuille de match"> 
+                </form>
+            </div>
+            <?php
+                if(isset($_POST['feuille'])){
+                    header("Location:saisie_feuille_match.php");
+                }
+                ?>
+        </body>
+        </html>
+    <?php endif;
+} else {
 ?>
 
 <!DOCTYPE html>
@@ -130,16 +164,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <img class="headerlogo" src="photo/Headerlogo.png">
                 <li><a href="accueil_stat.php">Statistiques</a></li>
                 <li><a href="Gestion_joueurs_matchs.php">Joueurs</a></li>
-                <li><a href="saisie_feuille_match.php">Matchs</a></li>
+                <li><a href="matchs.php">Matchs</a></li>
             </ul>
         </div>
     </header>
     <h1>Modifier les joueurs pour le match</h1>
     <p>Match sélectionné : <?= $dateHeureMatch['Date_heure_match'] ?></p>
-
-    <?php if (!empty($message)): ?>
-        <div class="message"><?= $message ?></div>
-    <?php endif; ?>
 
     <form action="" method="POST" class="tab">
         <table>
@@ -183,9 +213,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </select>
                     </td>
                 </tr>
-            <?php endforeach; ?>
+            <?php endforeach;?>
         </table>
         <button value="" type="submit">Enregistrer les modifications</button>
+        <?php } ?>
     </form>
 </body>
 </html>

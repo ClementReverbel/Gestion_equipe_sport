@@ -10,7 +10,7 @@
     </head>
     <?php if (!isset($_SESSION["login"])){ ?>
         <p>Vous devez vous connecter d'abord</p>
-        <a href="../**.php">Lien vers la page de connexion</a>
+        <a href="../index.php">Lien vers la page de connexion</a>
     <?php 
         } else { ?>
             <header id="myHeader">  
@@ -18,7 +18,7 @@
                     <ul class="menu-list">
                         <img class="headerlogo" src="photo/Headerlogo.png">
                         <li><a href="accueil_stat.php">Statistiques</a></li>
-                        <li><a  href="Gestion_joueurs_matchs">Joueurs</a></li>
+                        <li><a  href="Gestion_joueurs_matchs.php">Joueurs</a></li>
                         <li><a class='appui' href="#">Matchs</a></li>
                     </ul>
                 </div>
@@ -50,7 +50,7 @@
                 </div>
                 <div>
                     <form method="POST" action="">
-                        <input type="submit" name="feuille" value="Modifier mes matchs">
+                        <input type="submit" name="feuille" value="Saisir une feuille de match">
                     </form>
                 </div>
                 <?php
@@ -199,9 +199,9 @@
                     
                         // Exécuter la requête
                         if ($requete->execute(array($id_match))) {
-                            echo "Le match à été supprimé avec succès.";
+                            echo '<div class="messagereussi">Le match à été supprimé avec succès.</div>';
                         } else {
-                            echo "Erreur lors de la suppression du match.";
+                            echo ' <div class="message">Erreur lors de la suppression du match.</div>';
                         }
                     }
                     //Si le bouton modifié a été pressé
@@ -225,9 +225,9 @@
                                 //liaison du formulaire à la requete SQL
                                 if($requete->execute(array('date_time'=>$date_time,'equipeadv'=>$_POST['new_equipeadv'],
                                    'domicile'=>$domicile, 'id_match'=>$id_match))){
-                                   echo "Le match à été modifié avec succès.";
+                                   echo '<div class="messagereussi">Le match à été modifié avec succès.</div>';
                                 } else {
-                                    echo "problème lors de la modification";
+                                    echo '<div class="message">problème lors de la modification</div>';
                                 }
                                 
                     }

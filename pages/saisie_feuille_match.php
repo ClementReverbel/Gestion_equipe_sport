@@ -2,7 +2,7 @@
 session_start();
 if (!isset($_SESSION["login"])) {
     echo "<p>Vous devez vous connecter d'abord</p>";
-    echo "<a href='../connexion.php'>Lien vers la page de connexion</a>";
+    echo "<a href='../index.php'>Lien vers la page de connexion</a>";
     exit;
 }
 

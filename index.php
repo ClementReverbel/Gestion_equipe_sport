@@ -49,10 +49,10 @@
                     } else {
                     //Si l'utilisateur n'est pas trouvé dans la base de données ou que le mot de passe est incorrect :
                     //Affichage d'une erreur adéquat
-                        echo('Mot de passe erroné');
+                        echo("<div class='message'> Mot de passe erroné </div>");
                     }
                 }else{
-                    echo("Utilisateur inconnu");
+                    echo("<div class='message'> Utilisateur inconnu </div>");
                 }
             }
         } else {

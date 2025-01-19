@@ -57,7 +57,11 @@ form {
     margin: 20px auto;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 80%;
+    width: 40%
+}
+
+form .class{
+    width: 80%
 }
 
 form li {
@@ -162,4 +166,18 @@ h3{
 
 p{
     text-align: center;
+}
+
+.message{
+    margin-top: 10%;
+    text-align: center;
+    text-shadow: #333;
+    color: #f44336;
+}
+
+.messagereussi{
+    margin-top: 10%;
+    text-align: center;
+    text-shadow: #333;
+    color: #4CAF50;
 }

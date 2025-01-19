@@ -1,5 +1,10 @@
 <?php
     session_start();
+    if (!isset($_SESSION["login"])) {
+        echo "<p>Vous devez vous connecter d'abord</p>";
+        echo "<a href='../index.php'>Lien vers la page de connexion</a>";
+        exit;
+    }
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -159,7 +164,7 @@
                 <?php
             } else {
                 //Si le joueur n'est pas trouvé, on affiche une erreur
-                echo "<p>Joueur introuvable avec ce numéro de licence.</p>";
+                echo '<div class="message"> Joueur introuvable avec ce numéro de licence.</div>';
             }
         }
         //Si l'utilisateur à choisit de modifier le joueur
@@ -181,7 +186,7 @@
                 'statut' => $_POST['statut']
             ]);
 
-            echo "<p>Joueur mis à jour avec succès !</p>";
+            echo '<div class="message">Joueur mis à jour avec succès !</div>';
         }
         //Si l'utilisateur à choisit de supprimer le joueur
         if (isset($_POST['supprimer'])) {
@@ -200,7 +205,7 @@
             $supprimerRequete->execute([
                 'num' => $_POST['NumLic']
             ]);
-            echo "<p>Le joueur a été supprimé</p>";
+            echo '<div class="message">Le joueur a été supprimé</div>';
             }
         }
         echo "<table>
