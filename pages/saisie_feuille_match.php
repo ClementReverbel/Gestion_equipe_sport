@@ -6,6 +6,9 @@ if (!isset($_SESSION["login"])) {
     exit;
 }
 
+//Date actuelle sous forme de tableau
+$date_array = date('Y-m-d');
+
 $linkpdo = new PDO("mysql:host=mysql-volleytrack.alwaysdata.net;dbname=volleytrack_bd", "385425", "\$iutinfo");
 
 // Récupérer les matchs non sélectionnés
@@ -26,7 +29,18 @@ $requeteMatchsSelect = $linkpdo->query("
     WHERE  m.id_match = p.idMatch
     AND m.Score IS NULL
 ");
+
 $matchsSelect = $requeteMatchsSelect->fetchAll(PDO::FETCH_ASSOC);
+
+$requeteMatchsPasses = $linkpdo->query("
+    SELECT DISTINCT m.id_match, m.Date_heure_match, m.Nom_equipe_adverse
+    FROM matchs m, participer p
+    WHERE  m.id_match = p.idMatch
+    AND m.Score IS NULL
+    AND CAST(m.Date_heure_match AS DATE) < '".$date_array."'
+");
+
+$matchPasses = $requeteMatchsPasses->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -84,7 +98,7 @@ $matchsSelect = $requeteMatchsSelect->fetchAll(PDO::FETCH_ASSOC);
         <label for="matchConfig">Choisir un match configuré :</label>
         <select name="id_match" id="matchConfig" required>
             <option value="">-- Sélectionnez un match --</option>
-            <?php foreach ($matchsSelect as $match) { ?>
+            <?php foreach ($matchPasses as $match) { ?>
                 <option value="<?= $match['id_match'] ?>">
                     <?= $match['Date_heure_match'] ?> - <?= $match['Nom_equipe_adverse'] ?>
                 </option>
